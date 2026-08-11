@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>考编公告聚合 · 深圳</title>
+<style>
+:root {
+  --bg: #F4F7FA;
+  --card: #FFFFFF;
+  --border: #DCE6F0;
+  --text: #1B2A41;
+  --muted: #5B6B7B;
+  --accent: #2F6FBA;
+  --accent-bg: #E9F2FC;
+  --dark: #1B2A41;
+  --hot: #C44D4D;
+  --hot-bg: #FDF0F0;
+  --good: #2E7D5B;
+  --good-bg: #E7F4EE;
+  --tier1: #2F6FBA;
+  --tier2: #5B8FD4;
+  --tier3: #1B2A41;
+  --tier4: #2E7D5B;
+  --tier5: #6B7A8C;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: linear-gradient(180deg, #F4F7FA 0%, #EDF2F8 100%);
+  background-attachment: fixed; color: var(--text);
+  font-family: "PingFang SC", "Microsoft YaHei", -apple-system, "Segoe UI", sans-serif;
+  font-size: 14px;
+}
+body::-webkit-scrollbar { width: 8px; }
+body::-webkit-scrollbar-track { background: #EDF1F6; }
+body::-webkit-scrollbar-thumb { background: #C6D2E0; border-radius: 4px; }
+body::-webkit-scrollbar-thumb:hover { background: #A9BBD0; }
+header {
+  background: #fff; color: var(--text); padding: 14px 28px;
+  position: sticky; top: 0; z-index: 50;
+  box-shadow: 0 2px 16px rgba(45,52,54,.05);
+  border-bottom: 1px solid var(--border);
+}
+.header-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+header h1 { margin: 0; font-size: 20px; display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.3px; }
+header h1 span { font-size: 12px; color: var(--muted); font-weight: normal; }
+header .meta { font-size: 12px; color: var(--muted); }
+header .actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.btn {
+  border: 1px solid var(--border); background: #fff;
+  color: var(--text); border-radius: 20px; padding: 7px 16px; cursor: pointer; font-size: 13px;
+  transition: all .2s ease; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+.btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
+.btn.primary:hover { background: #245A9B; color: #fff; }
+.btn.loading { opacity: .7; pointer-events: none; }
+.btn.loading::before {
+  content: ""; width: 12px; height: 12px; border: 2px solid rgba(255,255,255,.4);
+  border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+main { max-width: 1200px; margin: 0 auto; padding: 16px; }
+.bookmarks {
+  background: transparent; border: none; border-radius: 0;
+  padding: 0; margin-bottom: 18px;
+}
+.bookmarks h2 { margin: 0 0 12px; font-size: 14px; color: var(--muted); font-weight: 600; }
+.bm-head {
+  display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none;
+  padding: 0 0 0 2px;
+}
+.bm-head .bm-count { font-size: 12px; color: var(--accent); font-weight: 600; }
+.bm-head .ft-arrow { margin-left: 0; transition: transform .2s ease; }
+.bm-grid.collapsed { display: none; }
+.bm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-bottom: 16px; }
+.bm-tier-head {
+  font-size: 12px; font-weight: 600; color: var(--muted); padding: 6px 0 4px;
+  letter-spacing: .3px; grid-column: 1 / -1;
+}
+.bm-tier-head .tier-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px;
+}
+.bm {
+  display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text);
+  border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px;
+  background: #fff;
+  transition: all .2s ease; min-width: 0;
+  box-shadow: 0 2px 8px rgba(27,42,65,.06);
+}
+.bm:hover { border-color: var(--accent); background: var(--accent-bg); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(47,111,186,.14); }
+.bm-icon {
+  width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 700; color: #fff; background: var(--accent);
+}
+.bm-icon img { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; }
+.bm-txt { display: flex; flex-direction: column; min-width: 0; gap: 2px; }
+.bm .nm { font-weight: 600; font-size: 13px; line-height: 1.3; }
+.bm .nt { font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.toolbar {
+  display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;
+}
+.filter-section {
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(27,42,65,.06);
+}
+.filter-toggle {
+  display: flex; align-items: center; gap: 8px;
+  padding: 14px 20px; cursor: pointer; font-size: 14px; font-weight: 600;
+  user-select: none; transition: background .2s ease;
+  border-radius: 14px;
+}
+.filter-toggle:hover { background: var(--accent-bg); }
+.filter-toggle.open { border-bottom: 1px solid var(--border); border-radius: 14px 14px 0 0; }
+.ft-badge {
+  background: var(--accent); color: #fff; border-radius: 20px;
+  font-size: 11px; padding: 1px 8px; font-weight: 600; display: none;
+}
+.ft-badge.show { display: inline-block; }
+.ft-arrow { margin-left: auto; color: var(--muted); font-size: 12px; transition: transform .2s ease; }
+.filter-panel.collapsed { display: none; }
+.search input {
+  width: 320px; max-width: 100%; padding: 9px 16px; border: 1px solid var(--border);
+  border-radius: 20px; font-size: 14px; outline: none; transition: all .2s ease;
+}
+.search input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+.filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip {
+  padding: 6px 12px; border: 1px solid var(--border); border-radius: 20px;
+  cursor: pointer; font-size: 13px; background: var(--card); user-select: none;
+  transition: all .2s ease;
+}
+.chip:hover { border-color: var(--accent); }
+.chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.chip.hot { border-color: var(--hot); color: var(--hot); }
+.chip.hot.active { background: var(--hot); color: #fff; }
+.filter-panel {
+  padding: 12px 20px 16px;
+}
+.fp-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 4px 0; }
+.fp-label { font-size: 12px; color: var(--muted); width: 60px; flex-shrink: 0; }
+.fp-chip {
+  padding: 4px 10px; border: 1px solid var(--border); border-radius: 20px;
+  cursor: pointer; font-size: 12px; background: #fff; user-select: none;
+  transition: all .2s ease;
+}
+.fp-chip:hover { border-color: var(--accent); }
+.fp-chip.active { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); font-weight: 600; }
+.fp-chip.single { border-radius: 20px; }
+.fp-more-row { display: flex; padding: 6px 0 2px; }
+.fp-more-btn {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 12px;
+  color: var(--muted); cursor: pointer; padding: 4px 14px; border-radius: 20px;
+  border: 1px dashed var(--border); background: #fff; user-select: none;
+  transition: all .2s ease;
+}
+.fp-more-btn:hover { border-color: var(--accent); color: var(--accent); }
+.fp-more { padding-top: 2px; }
+.fp-more.collapsed { display: none; }
+.track-count { font-size: 12px; color: var(--muted); }
+.track-count b { color: var(--accent); }
+.exclude-toggle {
+  display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text);
+  cursor: pointer; user-select: none; padding: 4px 12px; border: 1px solid var(--border);
+  border-radius: 20px; background: #fff; transition: all .2s ease;
+}
+.exclude-toggle.active { border-color: var(--hot); color: var(--hot); background: var(--hot-bg); }
+.track-input {
+  padding: 6px 14px; border: 1px solid var(--border); border-radius: 20px;
+  font-size: 12px; width: 360px; max-width: 100%; outline: none; transition: all .2s ease;
+}
+.track-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+.track-add {
+  padding: 6px 14px; border: 1px solid var(--accent); border-radius: 20px;
+  background: var(--accent-bg); color: var(--accent); cursor: pointer; font-size: 12px;
+  transition: all .2s ease;
+}
+.track-add:hover { background: var(--accent); color: #fff; }
+.track-chips { display: flex; gap: 6px; flex-wrap: wrap; padding: 4px 0 0 68px; }
+.track-chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px;
+  border: 1px solid var(--border); border-radius: 20px; font-size: 12px; background: #fff;
+}
+.track-chip .rm {
+  cursor: pointer; color: var(--muted); font-weight: 700; padding: 0 2px;
+}
+.track-chip .rm:hover { color: var(--hot); }
+.track-hint { font-size: 11px; color: var(--muted); margin-left: 68px; padding-bottom: 4px; }
+.stats {
+  display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+  margin-bottom: 18px; padding: 0 2px;
+}
+.sbadge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; padding: 5px 12px; border-radius: 20px;
+  background: var(--card); border: 1px solid var(--border); color: var(--text);
+  white-space: nowrap; transition: all .2s ease;
+}
+.sbadge b { font-weight: 700; }
+.sbadge.hot { background: var(--hot-bg); color: var(--hot); border-color: #F3C6C6; }
+.sbadge.acc { background: var(--accent-bg); color: var(--accent); border-color: #CFDCF0; }
+.sbadge.good { background: var(--good-bg); color: var(--good); border-color: #B7E3C8; }
+.sbadge.mut { background: #E4EAF3; color: var(--muted); border-color: #D5DEEA; }
+.stats-empty { display: none; }
+.skeleton {
+  background: linear-gradient(90deg, #E4EAF3 25%, #EFF3F9 50%, #E4EAF3 75%);
+  background-size: 200% 100%; animation: skel 1.2s infinite;
+  border-radius: 12px; margin-bottom: 8px; height: 48px;
+}
+@keyframes skel { to { background-position: -200% 0; } }
+.channel-group {
+  margin-bottom: 18px; background: #fff; border: 1px solid var(--border);
+  border-radius: 14px; padding: 14px 18px;
+  box-shadow: 0 2px 8px rgba(27,42,65,.06);
+}
+.channel-head {
+  display: flex; align-items: center; gap: 8px; margin: 0 0 10px; font-size: 16px; font-weight: 600;
+}
+.channel-head .tier-tag {
+  font-size: 11px; padding: 2px 10px; border-radius: 12px; color: #fff; flex-shrink: 0;
+}
+.channel-head .tier-tag.t1 { background: var(--tier1); }
+.channel-head .tier-tag.t2 { background: var(--tier2); }
+.channel-head .tier-tag.t3 { background: var(--tier3); }
+.channel-head .tier-tag.t4 { background: var(--tier4); }
+.channel-head .tier-tag.t5 { background: var(--tier5); }
+.channel-head .cnt { font-size: 12px; color: var(--muted); font-weight: normal; }
+.item {
+  display: flex; gap: 0; background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px; padding: 0; margin-bottom: 14px;
+  text-decoration: none; color: var(--text); transition: all .2s ease;
+  min-width: 0; overflow: hidden;
+  box-shadow: 0 2px 8px rgba(27,42,65,.06);
+}
+.item-wrap { margin-bottom: 0; }
+.item:hover { box-shadow: 0 6px 20px rgba(27,42,65,.12); transform: translateY(-1px); }
+.item.blocked-item { opacity: .55; background: #FAF8F6; }
+.item-num {
+  width: 0; flex-shrink: 0; display: none;
+}
+.item-num.t1n, .item-num.t2n, .item-num.t3n, .item-num.t4n, .item-num.t5n, .item-num.hotn { display: none; }
+.item-body { flex: 1; min-width: 0; padding: 16px 18px; }
+.item-top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.item-title { flex: 1; font-size: 15px; font-weight: 600; line-height: 1.5; min-width: 0; }
+.item-title .hl { color: var(--hot); font-weight: 700; }
+.item-title .hl.blue { color: var(--accent); }
+.item-badge {
+  flex-shrink: 0; font-size: 11px; font-weight: 700; padding: 2px 10px;
+  border-radius: 20px; color: #fff; line-height: 1.3;
+}
+.item-badge.hot { background: #E74C3C; }
+.item-badge.new { background: #27AE60; }
+.item-sub { font-size: 12px; color: var(--muted); line-height: 1.4; margin-bottom: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item-bottom { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.item-actions {
+  display: flex; flex-direction: row; gap: 20px; flex-shrink: 0; align-items: center;
+  justify-content: center; padding: 14px 20px;
+}
+.item-actions .ia {
+  width: 52px; height: 52px; border-radius: 50%; cursor: pointer; display: flex;
+  flex-direction: column; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 500; gap: 4px;
+  border: none; background: transparent; color: #9CA3AF;
+  user-select: none; transition: all .2s ease; padding: 0;
+}
+.item-actions .ia .ia-icon { display: flex; line-height: 1; }
+.item-actions .ia .ia-label { font-size: 9px; line-height: 1; letter-spacing: .3px; color: #6B7280; }
+.item-actions .ia.m-todo {
+  background: #2F6FBA; color: #fff;
+  box-shadow: 0 3px 12px rgba(47,111,186,.3);
+}
+.item-actions .ia.m-todo .ia-label { color: rgba(255,255,255,.9); }
+.item-actions .ia.m-todo:hover { background: #1D4ED8; transform: scale(1.08); box-shadow: 0 5px 18px rgba(47,111,186,.4); }
+.item-actions .ia.m-done {
+  background: transparent; color: #9CA3AF;
+  border: 2px solid #D1D5DB;
+}
+.item-actions .ia.m-done .ia-label { color: #6B7280; }
+.item-actions .ia.m-done:hover { border-color: #2F6FBA; color: #2F6FBA; transform: scale(1.08); }
+.item-actions .ia.m-done.active { background: #2F6FBA; color: #fff; border-color: #2F6FBA; }
+.item-actions .ia.m-done.active .ia-label { color: #fff; }
+.item-actions .ia.m-hidden { background: var(--hot-bg); color: var(--hot); }
+.item-actions .ia.m-hidden.active { background: var(--hot); color: #fff; }
+.item-actions .ia-del { min-width: auto; border-radius: 14px; font-size: 11px; padding: 2px 8px; }
+.item.mark-todo { background: #FFFCF0; }
+.item.mark-done { opacity: .55; }
+.item.mark-done .item-title { text-decoration: line-through; }
+.item.mark-hidden { display: none; }
+.item.custom-item { }
+.tag { font-size: 11px; padding: 3px 10px; border-radius: 20px; white-space: nowrap; line-height: 1.4; }
+.custom-add-row {
+  display: flex; gap: 6px; align-items: center; flex-wrap: wrap;
+}
+.custom-add-input {
+  padding: 6px 14px; border: 1px solid var(--border); border-radius: 20px;
+  font-size: 12px; width: 460px; max-width: 100%; outline: none; transition: all .2s ease;
+}
+.custom-add-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+.custom-add-btn {
+  padding: 6px 14px; border: 1px solid var(--good); border-radius: 20px;
+  background: var(--good-bg); color: var(--good); cursor: pointer; font-size: 12px;
+  transition: all .2s ease;
+}
+.custom-add-btn:hover { background: var(--good); color: #fff; }
+.tag { font-size: 11px; padding: 2px 10px; border-radius: 20px; white-space: nowrap; }
+.tag.method-exam { background: #F3EDFC; color: #7B3FF2; }
+.tag.method-direct { background: var(--accent-bg); color: var(--accent); }
+.tag.method-result { background: #E4EAF3; color: var(--muted); }
+.tag.org-hq { background: #FFF0F5; color: #D6336C; }
+.tag.org-sydw { background: var(--good-bg); color: var(--good); }
+.tag.org-gq { background: #EFF5FC; color: var(--tier2); }
+.tag.org-yq { background: var(--accent-bg); color: var(--accent); }
+.tag.recruit-school { background: #E8F8F0; color: #52B788; }
+.tag.recruit-social { background: #FFF3E6; color: #F28C2E; }
+.tag.recruit-both { background: #F3EDFC; color: #7B3FF2; }
+.tag.region { background: #E4EAF3; color: #5B6B7B; }
+.tag.exclude { background: var(--hot-bg); color: var(--hot); }
+.tag.screen { background: var(--accent-bg); color: var(--accent); }
+.tag.screen.age30 { background: #FFF0F0; color: #C92A2A; font-weight: 600; }
+.tag.screen.party { background: #FFF4E6; color: #D9480F; }
+.tag.screen.major { background: var(--good-bg); color: #2B8A3E; }
+.tag.screen.majorrel { background: var(--accent-bg); color: var(--accent); }
+.tag.screen.majorunk { background: #E4EAF3; color: #5B6B7B; }
+.tag.date-tag { background: #E4EAF3; color: var(--muted); font-weight: 500; }
+.badge {
+  font-size: 11px; padding: 2px 8px; border-radius: 10px; white-space: nowrap;
+}
+.badge.b-hot { background: var(--hot-bg); color: var(--hot); }
+.badge.b-good { background: var(--good-bg); color: var(--good); }
+.empty { text-align: center; color: var(--muted); padding: 40px 0; font-size: 14px; }
+footer { text-align: center; color: var(--muted); font-size: 12px; padding: 24px; letter-spacing: .3px; }
+.toast {
+  position: fixed; left: 20px; bottom: 20px; background: #2D3436; color: #fff;
+  padding: 12px 20px; border-radius: 20px; font-size: 13px; z-index: 100;
+  opacity: 0; transition: opacity .3s ease; pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,.15);
+}
+.toast.show { opacity: 1; }
+.modal-mask {
+  position: fixed; inset: 0; background: rgba(45,52,54,.5);
+  display: flex; align-items: center; justify-content: center; z-index: 200;
+}
+.modal {
+  background: #fff; border-radius: 16px; padding: 24px 28px;
+  width: 380px; max-width: 90vw; box-shadow: 0 12px 48px rgba(0,0,0,.18);
+}
+.modal-title { font-size: 17px; font-weight: 700; margin-bottom: 12px; }
+.modal-line { font-size: 13px; color: #2D3436; margin-bottom: 6px; }
+.modal-line.muted { color: var(--muted); }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
+.modal-actions .btn { border-color: var(--border); background: var(--card); color: var(--muted); border-radius: 20px; }
+.modal-actions .btn:hover { background: #E4EAF3; }
+.modal-actions .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.modal-actions .btn.primary:hover { background: #245A9B; color: #fff; }
+
+/* ── Hero Cover ── */
+.hero {
+  min-height: calc(100vh - 56px); display: flex; flex-direction: column;
+  justify-content: center; align-items: center; padding: 60px 24px 40px;
+  background: linear-gradient(135deg, #FFFFFF 0%, #DCEBF9 100%);
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ""; position: absolute; top: -120px; right: -80px;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(47,111,186,.10) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-inner {
+  max-width: 1100px; width: 100%; display: flex; align-items: center;
+  gap: 60px; margin: 0 auto;
+}
+.hero-text { flex: 1; min-width: 0; }
+.hero-tag {
+  display: inline-block; font-size: 13px; color: #2F6FBA; font-weight: 600;
+  letter-spacing: 1px; margin-bottom: 16px; text-transform: uppercase;
+}
+.hero-title {
+  font-size: 42px; font-weight: 800; line-height: 1.3; color: var(--text);
+  margin: 0 0 16px;
+}
+.hero-highlight { color: #2F6FBA; }
+.hero-sub {
+  font-size: 16px; color: var(--muted); line-height: 1.7; margin: 0 0 28px;
+  max-width: 480px;
+}
+.hero-stats {
+  display: flex; gap: 24px; flex-wrap: wrap;
+}
+.hero-stat {
+  font-size: 13px; color: var(--muted);
+}
+.hero-stat b {
+  font-size: 22px; font-weight: 700; color: var(--text); margin-right: 4px;
+}
+.hero-card {
+  flex: 0 0 380px; background: #fff; border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(30,42,58,.06), 0 1px 3px rgba(30,42,58,.04);
+  padding: 24px; opacity: 0; transform: translateY(24px);
+  animation: heroFadeUp .7s ease-out .25s forwards;
+}
+.hc-head {
+  font-size: 13px; font-weight: 600; color: #4A7FBF; text-transform: uppercase;
+  letter-spacing: .8px; margin-bottom: 18px;
+}
+.hc-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px;
+}
+.hc-item {
+  border-radius: 12px; padding: 16px; text-align: center;
+  transition: transform .2s ease;
+}
+.hc-item:hover { transform: scale(1.03); }
+.hc-item.t1 { background: #E9F2FC; }
+.hc-item.t2 { background: #EFF5FC; }
+.hc-item.t3 { background: #E4EAF3; }
+.hc-item.hot { background: #FDF0F0; }
+.hc-num {
+  display: block; font-size: 28px; font-weight: 800; line-height: 1;
+  margin-bottom: 4px;
+}
+.hc-item.t1 .hc-num { color: #2F6FBA; }
+.hc-item.t2 .hc-num { color: #4A7FBF; }
+.hc-item.t3 .hc-num { color: #1B2A41; }.hc-item.hot .hc-num { color: #C44D4D; }
+.hc-label {
+  font-size: 12px; color: #5B6B7B; font-weight: 500;
+}
+.hc-foot {
+  display: flex; align-items: center; gap: 6px; font-size: 12px; color: #5B6B7B;
+}
+.hc-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #2E7D5B;
+  animation: pulse 2s ease-in-out infinite;
+}
+.hero-scroll {
+  margin-top: 32px; font-size: 13px; color: var(--muted);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  cursor: pointer; opacity: .7; transition: opacity .2s;
+}
+.hero-scroll:hover { opacity: 1; }
+.scroll-arrow {
+  font-size: 20px; color: #4A7FBF;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+.scroll-text { font-size: 11px; color: #5B6B7B; letter-spacing: .5px; }
+
+/* ── Stitch: Hero Search Bar ── */
+.hero-search {
+  display: flex; gap: 0; max-width: 520px; margin-bottom: 20px;
+}
+.hero-search input {
+  flex: 1; padding: 12px 20px; border: 2px solid var(--border);
+  border-radius: 24px 0 0 24px; font-size: 14px; outline: none;
+  background: #fff; transition: all .2s;
+}
+.hero-search input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+.hero-search button {
+  padding: 12px 28px; background: var(--accent); color: #fff; border: none;
+  border-radius: 0 24px 24px 0; font-size: 14px; font-weight: 600;
+  cursor: pointer; white-space: nowrap; transition: all .2s;
+}
+.hero-search button:hover { background: #245A9B; }
+
+/* ── Stitch: Stats Panel ── */
+.stats-panel {
+  flex: 0 0 380px; background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 20px;
+  box-shadow: 0 4px 20px rgba(27,42,65,.08);
+  opacity: 0; transform: translateY(24px);
+  animation: heroFadeUp .7s ease-out .25s forwards;
+}
+.sp-title { font-size: 14px; font-weight: 700; margin-bottom: 16px; color: var(--dark); }
+.sp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sp-card { border-radius: 12px; padding: 14px; position: relative; overflow: hidden; }
+.sp-card.blue { background: linear-gradient(135deg, #2F6FBA, #1D4ED8); color: #fff; }
+.sp-card.light { background: var(--accent-bg); }
+.sp-card .label { font-size: 11px; opacity: .85; margin-bottom: 4px; }
+.sp-card .value { font-size: 22px; font-weight: 800; }
+.sp-card .sub { font-size: 10px; opacity: .7; margin-top: 2px; }
+.sp-card.trend { display: flex; align-items: center; justify-content: space-between; }
+.sp-card.list-card { grid-column: 1 / -1; }
+.sp-card.list-card .item {
+  font-size: 12px; color: var(--text); padding: 4px 0;
+  border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 6px;
+}
+.sp-card.list-card .item:last-child { border-bottom: none; }
+.sp-card.list-card .dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0;
+}
+
+/* ── Stitch: Bookmarks Carousel ── */
+.bm-carousel-wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.bm-head-stitch {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
+}
+.bm-head-stitch h2 { font-size: 16px; font-weight: 700; color: var(--dark); margin: 0; }
+.bm-head-stitch .hint { font-size: 12px; color: var(--muted); }
+.bm-carousel {
+  display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none;
+}
+.bm-carousel::-webkit-scrollbar { display: none; }
+.bm-card {
+  flex-shrink: 0; width: 130px; border: 1px solid var(--border); border-radius: 14px;
+  padding: 16px 12px; text-align: center; background: #fff; cursor: pointer;
+  transition: all .2s; text-decoration: none; color: var(--text);
+}
+.bm-card:hover {
+  border-color: var(--accent); transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(47,111,186,.12);
+}
+.bm-card-icon {
+  width: 48px; height: 48px; border-radius: 12px; margin: 0 auto 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 700; color: #fff; overflow: hidden;
+}
+.bm-card-icon img { width: 100%; height: 100%; object-fit: contain; border-radius: 12px; }
+.bm-card-name {
+  font-size: 13px; font-weight: 600; margin-bottom: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.bm-card-url {
+  font-size: 10px; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* ── Stitch: Bookmarks Scroll Button ── */
+.bm-carousel-inner { position: relative; }
+.bm-scroll-btn {
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid var(--border); background: rgba(255,255,255,.95);
+  box-shadow: 0 2px 10px rgba(27,42,65,.14);
+  color: var(--accent); font-size: 20px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s; z-index: 6;
+}
+.bm-scroll-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ── Stitch: Filter Dropdowns ── */
+.fd-bar { display: flex; gap: 10px; flex-wrap: wrap; padding: 6px 0 4px; position: relative; }
+.fd-trigger {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border: 1px solid var(--border); border-radius: 20px;
+  background: #fff; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text);
+  transition: all .2s; user-select: none;
+}
+.fd-trigger:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+.fd-trigger.open { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+.fd-trigger .fd-arrow { font-size: 11px; color: var(--muted); transition: transform .2s; }
+.fd-trigger.open .fd-arrow { transform: rotate(180deg); }
+.fd-body {
+  display: none; position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 20;
+  background: #fff; border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(27,42,65,.14);
+  padding: 12px; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.fd-body.open { display: flex; }
+
+/* ── Stitch: Filter Groups ── */
+.filter-group {
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  margin-bottom: 8px; overflow: hidden;
+}
+.filter-group-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; cursor: pointer; user-select: none; transition: background .2s;
+}
+.filter-group-head:hover { background: var(--accent-bg); }
+.filter-group-head .fg-label {
+  font-size: 13px; font-weight: 600; color: var(--text);
+  display: flex; align-items: center; gap: 8px;
+}
+.filter-group-head .fg-label .icon { font-size: 14px; }
+.filter-group-head .fg-arrow {
+  font-size: 12px; color: var(--muted); transition: transform .2s;
+}
+.filter-group-head.open .fg-arrow { transform: rotate(180deg); }
+.filter-group-body {
+  padding: 0 16px 12px; display: flex; flex-wrap: wrap; gap: 6px;
+}
+.filter-group-body.collapsed { display: none; }
+.fg-chip {
+  padding: 5px 12px; border: 1px solid var(--border); border-radius: 20px;
+  font-size: 12px; cursor: pointer; background: #fff; transition: all .2s; user-select: none;
+}
+.fg-chip:hover { border-color: var(--accent); }
+.fg-chip.active {
+  background: var(--accent-bg); color: var(--accent);
+  border-color: var(--accent); font-weight: 600;
+}
+
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; } 50% { opacity: .4; }
+}
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); }
+}
+
+.hero-text {
+  opacity: 0; transform: translateY(24px);
+  animation: heroFadeUp .7s ease-out .1s forwards;
+}
+
+@media (max-width: 768px) {
+  .hero { padding: 40px 16px 60px; min-height: auto; }
+  .hero-inner { flex-direction: column; gap: 32px; }
+  .hero-card { flex: none; width: 100%; }
+  .hero-title { font-size: 30px; }
+  .hero-stats { gap: 16px; }
+}
+
+/* 右下角悬浮搜索 */
+.search-fab { position: fixed; right: 22px; bottom: 22px; z-index: 90; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.back-to-top {
+  width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer;
+  background: #fff; color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px rgba(27,42,65,.15); transition: all .25s ease;
+  font-size: 18px;
+}
+.back-to-top:hover { background: var(--accent); color: #fff; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(47,111,186,.35); }
+.fab-btn {
+  width: 52px; height: 52px; border-radius: 50%;
+  border: none; cursor: pointer;
+  background: var(--accent); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 20px rgba(47,111,186,.4);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.fab-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(47,111,186,.5); }
+
+.search-pop {
+  position: fixed; right: 22px; bottom: 84px; width: 300px; max-width: calc(100vw - 32px);
+  background: #fff; border: 1px solid var(--border); border-radius: 14px;
+  box-shadow: 0 12px 36px rgba(30,42,58,.16); z-index: 95;
+  padding: 14px; display: none; flex-direction: column; gap: 10px;
+}
+.search-pop.open { display: flex; animation: popUp .18s ease; }
+@keyframes popUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.sp-head { display: flex; align-items: center; justify-content: space-between; }
+.sp-title { font-size: 13px; font-weight: 700; color: var(--text); }
+.sp-close { cursor: pointer; color: var(--muted); font-size: 18px; line-height: 1; padding: 2px 6px; }
+.sp-close:hover { color: var(--text); }
+.search-pop #q {
+  width: 100%; box-sizing: border-box; padding: 10px 12px;
+  border: 1px solid var(--border); border-radius: 10px;
+  font-size: 14px; outline: none; background: var(--bg);
+}
+.search-pop #q:focus { border-color: var(--accent); background: #fff; }
+.sp-label { font-size: 11px; color: var(--muted); letter-spacing: .3px; }
+.search-pop .filters {
+  display: flex; flex-wrap: wrap; gap: 6px; max-height: 190px; overflow-y: auto;
+}
+.search-pop .chip { padding: 5px 12px; font-size: 12px; }
+
+/* 右键菜单 */
+.ctx-menu {
+  position: fixed; z-index: 300; min-width: 150px;
+  background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(30,42,58,.18); padding: 6px; display: none;
+}
+.ctx-menu.open { display: block; animation: popUp .12s ease; }
+.ctx-menu .cm-item {
+  padding: 8px 12px; font-size: 13px; color: var(--text);
+  border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+}
+.ctx-menu .cm-item:hover { background: var(--accent-bg); color: var(--accent); }
+.ctx-menu .cm-item.cm-del { color: var(--hot); }
+.ctx-menu .cm-item.cm-del:hover { background: var(--hot-bg); color: var(--hot); }
+.ctx-menu .cm-sep { height: 1px; background: var(--border); margin: 5px 8px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-top">
+    <h1><span style="font-size:16px;font-weight:800;color:var(--dark);letter-spacing:-.3px">考编公告聚合</span> <span style="font-size:12px;color:var(--muted);font-weight:normal;margin-left:4px">深圳 · 广东 · 考试通道</span></h1>
+    <div class="meta">更新 <span id="updated">--</span> | 共 <b id="total">--</b> 条 | 每 3 小时</div>
+    <div class="actions">
+      <button class="btn primary" onclick="loadAll()" id="refreshBtn">立即刷新</button>
+      <button class="btn" onclick="toggleHotOnly()" id="hotBtn">只看高分</button>
+      <button class="btn" onclick="clearAll()">清空搜索</button>
+    </div>
+  </div>
+</header>
+<section class="hero" id="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <span class="hero-tag">考编 · 深圳</span>
+      <h1 class="hero-title">找到最适合你的<br><span class="hero-highlight">体制内机会</span></h1>
+      <p class="hero-sub">自动聚合 16 个渠道、数百条公告，按用户画像智能筛选，不错过任何一个上岸机会。</p>
+      <div class="hero-search">
+        <input type="text" id="heroSearchInput" placeholder="搜索职位、地区或公司..." oninput="document.getElementById('q').value=this.value;render()">
+        <button onclick="document.getElementById('q').value=document.getElementById('heroSearchInput').value;render()">快速搜索</button>
+      </div>
+      <div class="hero-stats">
+        <span class="hero-stat"><b id="hsChannels">16</b>渠道</span>
+        <span class="hero-stat"><b id="hsTotal">--</b>公告</span>
+        <span class="hero-stat"><b id="hsExcluded">--</b>已排除</span>
+        <span class="hero-stat"><b id="hsTiers">4</b>梯队</span>
+      </div>
+    </div>
+    <div class="stats-panel">
+      <div class="sp-title">实时招聘动态与趋势</div>
+      <div class="sp-grid">
+        <div class="sp-card blue">
+          <div class="label">今日新增公告：</div>
+          <div class="value" id="spNewToday">--</div>
+        </div>
+        <div class="sp-card light">
+          <div class="label">今日新增公告</div>
+          <div style="display:flex;gap:3px;align-items:flex-end;height:36px;margin-top:6px">
+            <div style="width:12px;height:18px;background:#2F6FBA;border-radius:3px;opacity:.85"></div>
+            <div style="width:12px;height:28px;background:#2F6FBA;border-radius:3px;opacity:.65"></div>
+            <div style="width:12px;height:22px;background:#2F6FBA;border-radius:3px;opacity:.5"></div>
+            <div style="width:12px;height:32px;background:#2F6FBA;border-radius:3px;opacity:.9"></div>
+            <div style="width:12px;height:16px;background:#2F6FBA;border-radius:3px;opacity:.6"></div>
+          </div>
+        </div>
+        <div class="sp-card list-card">
+          <div class="label">最新发布</div>
+          <div id="spLatestList">
+            <div class="item"><span class="dot"></span>加载中...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll" onclick="document.getElementById('list').scrollIntoView({behavior:'smooth'})">
+    <span class="scroll-arrow">↓</span>
+    <span class="scroll-text">下滑浏览</span>
+  </div>
+</section>
+<main>
+  <div class="bm-carousel-wrap">
+    <div class="bm-head-stitch">
+      <h2>知名企业热招</h2>
+      <span class="hint" id="bmCount"></span>
+    </div>
+    <div class="bm-carousel-inner">
+      <div class="bm-carousel" id="bookmarks"></div>
+      <button class="bm-scroll-btn" onclick="scrollBookmarks()" title="向右滑动" aria-label="向右滑动">›</button>
+    </div>
+  </div>
+  <div class="filter-section">
+  <div class="filter-toggle" id="filterToggle" onclick="toggleFilters()">
+    <span>筛选条件</span>
+    <span class="ft-badge" id="filterBadge"></span>
+    <span class="ft-arrow" id="filterArrow">▾</span>
+  </div>
+  <div class="filter-panel" id="filterPanel">
+    <div class="fp-row">
+      <span class="fp-label">自定义添加</span>
+      <input class="custom-add-input" id="customUrl" placeholder="粘贴招聘公告链接（网址），标题留空则自动读取">
+      <input class="custom-add-input" id="customTitle" placeholder="可选：自定义标题" style="width:220px">
+      <button class="custom-add-btn" onclick="addCustom()">＋ 添加</button>
+    </div>
+    <div class="fp-row">
+      <span class="fp-label">求职追踪</span>
+      <input class="track-input" id="trackInput" placeholder="输入参加的考试名称，如：深圳财政局直属事业单位2026年集中公开招聘">
+      <button class="track-add" onclick="addTrack()">＋ 追踪</button>
+      <span class="exclude-toggle" id="exShowAllResults" onclick="toggleShowAllResults()">显示全部公示</span>
+      <span class="track-count" id="trackCount"></span>
+    </div>
+
+    <div class="fd-bar">
+      <div class="fd-item">
+        <div class="fd-trigger" onclick="toggleDropdown(this)">
+          <span class="fd-icon">🏷️</span><span class="fd-label">标记</span><span class="fd-arrow">▾</span>
+        </div>
+        <div class="fd-body">
+          <span class="fg-chip active" data-v="all" onclick="pick('mark','all')">全部</span>
+          <span class="fg-chip" data-v="待办" onclick="pick('mark','待办')">待办</span>
+          <span class="fg-chip" data-v="已办" onclick="pick('mark','已办')">已办</span>
+          <span class="fg-chip" data-v="hidden" onclick="pick('mark','hidden')">已删去</span>
+        </div>
+      </div>
+      <div class="fd-item">
+        <div class="fd-trigger" onclick="toggleDropdown(this)">
+          <span class="fd-icon">🏢</span><span class="fd-label">单位类型</span><span class="fd-arrow">▾</span>
+        </div>
+        <div class="fd-body">
+          <span class="fg-chip active" data-v="all" onclick="pick('org','all')">全部</span>
+          <span class="fg-chip" data-v="事业单位" onclick="pick('org','事业单位')">事业单位</span>
+          <span class="fg-chip" data-v="高校" onclick="pick('org','高校')">高校</span>
+          <span class="fg-chip" data-v="国企" onclick="pick('org','国企')">国企</span>
+          <span class="fg-chip" data-v="央企" onclick="pick('org','央企')">央企</span>
+          <span class="fg-chip" data-v="其他" onclick="pick('org','其他')">其他</span>
+        </div>
+      </div>
+      <div class="fd-item">
+        <div class="fd-trigger" onclick="toggleDropdown(this)">
+          <span class="fd-icon">📅</span><span class="fd-label">发布时间</span><span class="fd-arrow">▾</span>
+        </div>
+        <div class="fd-body">
+          <span class="fg-chip active" data-v="all" onclick="pick('time','all')">全部</span>
+          <span class="fg-chip" data-v="近3月" onclick="pick('time','近3月')">近3月</span>
+          <span class="fg-chip" data-v="近1月" onclick="pick('time','近1月')">近1月</span>
+          <span class="fg-chip" data-v="近1周" onclick="pick('time','近1周')">近1周</span>
+          <span class="fg-chip" data-v="近3天" onclick="pick('time','近3天')">近3天</span>
+          <span class="fg-chip" data-v="当日" onclick="pick('time','当日')">当日</span>
+        </div>
+      </div>
+      <div class="fd-item">
+        <div class="fd-trigger" onclick="toggleDropdown(this)">
+          <span class="fd-icon">⚙️</span><span class="fd-label">更多条件</span><span class="fd-arrow">▾</span>
+        </div>
+        <div class="fd-body">
+          <div class="fp-row" style="padding:4px 0;width:100%">
+            <span class="fp-label">排除</span>
+            <span class="exclude-toggle active" id="exTeacher" onclick="toggleExclude('teacher')">× 中小学教师岗</span>
+            <span class="exclude-toggle active" id="exDoctor" onclick="toggleExclude('doctor')">× 博士岗</span>
+            <span class="exclude-toggle active" id="exMajor" onclick="toggleExclude('major')">× 专业不符岗</span>
+            <span class="exclude-toggle active" id="exNotice" onclick="toggleExclude('notice')">× 政策/新闻</span>
+            <span class="exclude-toggle" id="exShow" onclick="toggleShowBlocked()">显示已排除</span>
+          </div>
+          <div class="track-chips" id="trackChips" style="width:100%"></div>
+          <div class="fp-row" style="padding:4px 0;width:100%">
+            <span class="fp-label">投递方式</span>
+            <span class="fg-chip" data-v="all" onclick="pick('method','all')">全部</span>
+            <span class="fg-chip" data-v="考试公告" onclick="pick('method','考试公告')">考试公告</span>
+            <span class="fg-chip" data-v="直接投递" onclick="pick('method','直接投递')">直接投递</span>
+            <span class="fg-chip" data-v="结果公示" onclick="pick('method','结果公示')">结果公示</span>
+          </div>
+          <div class="fp-row" style="padding:4px 0;width:100%">
+            <span class="fp-label">校招/社招</span>
+            <span class="fg-chip" data-v="all" onclick="pick('recruit','all')">全部</span>
+            <span class="fg-chip" data-v="校招" onclick="pick('recruit','校招')">校招</span>
+            <span class="fg-chip" data-v="社招" onclick="pick('recruit','社招')">社招</span>
+            <span class="fg-chip" data-v="校招/社招" onclick="pick('recruit','校招/社招')">校招/社招均可</span>
+          </div>
+          <div class="fp-row" style="padding:4px 0;width:100%">
+            <span class="fp-label">地区</span>
+            <span class="fg-chip" data-v="all" onclick="pick('region','all')">全部</span>
+            <span class="fg-chip" data-v="深圳" onclick="pick('region','深圳')">深圳</span>
+            <span class="fg-chip" data-v="广州" onclick="pick('region','广州')">广州</span>
+            <span class="fg-chip" data-v="东莞" onclick="pick('region','东莞')">东莞</span>
+            <span class="fg-chip" data-v="珠海" onclick="pick('region','珠海')">珠海</span>
+            <span class="fg-chip" data-v="佛山" onclick="pick('region','佛山')">佛山</span>
+            <span class="fg-chip" data-v="惠州" onclick="pick('region','惠州')">惠州</span>
+            <span class="fg-chip" data-v="中山" onclick="pick('region','中山')">中山</span>
+            <span class="fg-chip" data-v="江门" onclick="pick('region','江门')">江门</span>
+            <span class="fg-chip" data-v="肇庆" onclick="pick('region','肇庆')">肇庆</span>
+            <span class="fg-chip" data-v="全省/省直" onclick="pick('region','全省/省直')">全省/省直</span>
+            <span class="fg-chip" data-v="全国" onclick="pick('region','全国')">全国</span>
+          </div>
+          <div class="fp-row" style="padding:4px 0;width:100%">
+            <span class="fp-label">招聘对象</span>
+            <span class="fg-chip" data-v="all" onclick="pick('jieye','all')">全部</span>
+            <span class="fg-chip" data-v="含择业期" onclick="pick('jieye','含择业期')">含择业期</span>
+            <span class="fg-chip" data-v="仅应届" onclick="pick('jieye','仅应届')">仅应届</span>
+            <span class="fg-chip" data-v="社招" onclick="pick('jieye','社招')">社招</span>
+            <span class="fp-chip" data-v="未标注" onclick="pick('jieye','未标注')">未标注</span>
+          </div>
+          <div class="fp-row" style="padding:4px 0;width:100%">
+            <span class="fp-label">年龄上限</span>
+            <span class="fg-chip" data-v="all" onclick="pick('age','all')">全部</span>
+            <span class="fg-chip" data-v="≤30" onclick="pick('age','≤30')">≤30</span>
+            <span class="fg-chip" data-v="≤35" onclick="pick('age','≤35')">≤35</span>
+            <span class="fg-chip" data-v="≤40" onclick="pick('age','≤40')">≤40</span>
+            <span class="fg-chip" data-v="≤45" onclick="pick('age','≤45')">≤45</span>
+            <span class="fg-chip" data-v="不限" onclick="pick('age','不限')">不限</span>
+          </div>
+          <div class="fp-row" style="padding:4px 0;width:100%">
+            <span class="fp-label">党员要求</span>
+            <span class="fg-chip" data-v="all" onclick="pick('party','all')">全部</span>
+            <span class="fg-chip" data-v="需党员" onclick="pick('party','需党员')">需党员</span>
+            <span class="fg-chip" data-v="党员优先" onclick="pick('party','党员优先')">党员优先</span>
+            <span class="fg-chip" data-v="未标注" onclick="pick('party','未标注')">未标注</span>
+          </div>
+          <div class="fp-row" style="padding:4px 0;width:100%">
+            <span class="fp-label">专业对口</span>
+            <span class="fg-chip" data-v="all" onclick="pick('major','all')">全部</span>
+            <span class="fg-chip" data-v="对口" onclick="pick('major','对口')">对口</span>
+            <span class="fg-chip" data-v="相关" onclick="pick('major','相关')">相关</span>
+            <span class="fg-chip" data-v="未解析" onclick="pick('major','未解析')">未解析</span>
+            <span class="fg-chip" data-v="未标注" onclick="pick('major','未标注')">未标注</span>
+          </div>
+          <div class="track-hint" style="width:100%">条件核对：按用户画像（24岁本科·非党员·法学）自动核对——年龄上限低于24岁、需党员、专业明确不符的岗位自动排除（可点"显示已排除"查看原因）；附件岗位表尽力解析，解析不出的标"专业未解析"。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div id="list"></div>
+</main>
+<div class="search-fab" id="searchFab">
+  <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">↑</button>
+  <button class="fab-btn" onclick="toggleSearch()" title="搜索公告">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+  </button>
+</div>
+<div class="search-pop" id="searchPop">
+  <div class="sp-head">
+    <span class="sp-title">搜索公告</span>
+    <span class="sp-close" onclick="toggleSearch()" title="关闭">×</span>
+  </div>
+  <input id="q" type="text" placeholder="搜索公告标题…" oninput="render()" autocomplete="off">
+  <div class="sp-label">渠道来源（仅供参考，来源不重要）</div>
+  <div class="filters" id="filters"></div>
+</div>
+<div class="ctx-menu" id="ctxMenu">
+  <div class="cm-item" onclick="ctxAction('copy')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>复制原网址</div>
+  <div class="cm-item cm-del" onclick="ctxAction('del')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>删除</div>
+</div>
+<footer>本页面为本地离线聚合，抓取自各官方网站公告列表，实际报名请以 gov.cn 官方原文为准。</footer>
+<div class="toast" id="toast"></div>
+<div class="modal-mask" id="refreshModal" style="display:none">
+  <div class="modal">
+    <div class="modal-title">数据更新提醒</div>
+    <div class="modal-body">
+      <div class="modal-line">上次自动刷新时间：<b id="modalUpdated">--</b></div>
+      <div class="modal-line muted">每 3 小时自动刷新一次，是否现在手动刷新？</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn primary" onclick="refreshFromModal()">立即刷新</button>
+      <button class="btn" onclick="closeRefreshModal()">稍后再说</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let DATA = { channels: [], items: [] };
+let KEYWORDS = { priority: [], other: [] };
+let filter = "all";        // all | hot | 渠道id
+let hotOnly = false;
+let exTeacher = true;
+let exDoctor = true;
+let exMajor = true;
+let exNotice = true;
+let showBlocked = false;
+let showAllResults = false;
+let trackedExams = [];
+let fMethod = "all";
+let fOrg = "all";
+let fRegion = "all";
+let fRecruit = "all";
+let fTime = "all";
+let fMark = "all";
+let fJieye = "all";
+let fAge = "all";
+let fParty = "all";
+let fMajor = "all";
+let marks = {};  // fp -> "todo" | "done" | "hidden"
+let filtersOpen = true;
+let bookmarksOpen = true;
+let loading = false;
+
+function $(id) { return document.getElementById(id); }
+
+function updateHeroStats(data) {
+  if (!data || !data.items) return;
+  const items = data.items;
+  $("hsTotal").textContent = items.length;
+  $("hsExcluded").textContent = items.filter(i => i.blocked).length;
+
+  // Stats panel: today's new
+  const today = new Date().toISOString().slice(0, 10);
+  const todayNew = items.filter(i => (i.date || "").startsWith(today)).length;
+  if ($("spNewToday")) $("spNewToday").textContent = "+" + todayNew;
+
+  // Stats panel: latest 3
+  if ($("spLatestList")) {
+    const latest = items.filter(i => !i.blocked).slice(0, 3);
+    $("spLatestList").innerHTML = latest.length
+      ? latest.map(i => `<div class="item"><span class="dot"></span>${(i.title || "").slice(0, 24)}${(i.title || "").length > 24 ? "..." : ""}</div>`).join("")
+      : '<div class="item"><span class="dot"></span>暂无数据</div>';
+  }
+}
+
+function init() {
+  showSkeleton();
+  Promise.all([
+    fetch("/api/data").then(r => r.json()),
+    fetch("/api/keywords").then(r => r.json()),
+    fetch("/api/tracked").then(r => r.json()),
+  ]).then(([data, kw, trk]) => {
+    DATA = data; KEYWORDS = kw;
+    trackedExams = (trk && trk.exams) || [];
+    marks = data.marks || {};
+    $("updated").textContent = data.updated || "--";
+    $("total").textContent = data.items.length;
+    renderBookmarks();
+    renderFilters();
+    renderTrackChips();
+    render();
+    updateHeroStats(data);
+    askRefresh(data.updated);
+  }).catch(() => {
+    $("updated").textContent = "加载失败";
+  });
+}
+
+function showSkeleton() {
+  const list = $("list");
+  list.innerHTML = "";
+  for (let i = 0; i < 6; i++) {
+    const s = document.createElement("div");
+    s.className = "skeleton";
+    list.appendChild(s);
+  }
+}
+
+  const BM_COLORS = ["#2F6FBA", "#4A7FBF", "#1B2A41", "#2E7D5B", "#C44D4D", "#6B7A8C", "#B8860B", "#5B6B7B"];
+
+function bmDomain(url) {
+  try { return new URL(url).hostname.replace(/^www\./, ""); } catch { return ""; }
+}
+
+function renderBookmarks() {
+  const box = $("bookmarks");
+  box.innerHTML = "";
+  const bms = (DATA.bookmarks || []).slice().sort((a, b) => (a.tier || 99) - (b.tier || 99));
+
+  let colorIdx = 0;
+  bms.forEach(b => {
+    const a = document.createElement("a");
+    a.className = "bm-card";
+    a.href = b.url; a.target = "_blank";
+
+    const icon = document.createElement("div");
+    icon.className = "bm-card-icon";
+    const host = bmDomain(b.url);
+    const letter = ((b.name || "?").trim()[0] || "?").toUpperCase();
+    const color = BM_COLORS[colorIdx++ % BM_COLORS.length];
+    icon.textContent = letter;
+    icon.style.background = color;
+    if (host) {
+      const img = new Image();
+      img.onload = () => { icon.innerHTML = ""; icon.appendChild(img); };
+      img.src = "https://www.google.com/s2/favicons?domain=" + host + "&sz=64";
+    }
+    a.appendChild(icon);
+
+    const nm = document.createElement("div");
+    nm.className = "bm-card-name";
+    nm.textContent = b.name;
+    a.appendChild(nm);
+
+    const url = document.createElement("div");
+    url.className = "bm-card-url";
+    url.textContent = host || b.url;
+    a.appendChild(url);
+
+    box.appendChild(a);
+  });
+  $("bmCount").textContent = bms.length + " 个";
+}
+
+function toggleFilters() {
+  filtersOpen = !filtersOpen;
+  $("filterPanel").classList.toggle("collapsed", !filtersOpen);
+  $("filterArrow").textContent = filtersOpen ? "▴" : "▾";
+  $("filterToggle").classList.toggle("open", filtersOpen);
+}
+
+function toggleDropdown(trigger) {
+  const bar = trigger.closest(".fd-bar");
+  const body = trigger.parentElement.querySelector(".fd-body");
+  const wasOpen = body.classList.contains("open");
+  if (bar) {
+    bar.querySelectorAll(".fd-body").forEach(b => b.classList.remove("open"));
+    bar.querySelectorAll(".fd-trigger").forEach(t => t.classList.remove("open"));
+  }
+  if (!wasOpen) {
+    body.classList.add("open");
+    trigger.classList.add("open");
+  }
+}
+
+document.addEventListener("click", e => {
+  if (!e.target.closest(".fd-item")) {
+    document.querySelectorAll(".fd-body.open").forEach(b => b.classList.remove("open"));
+    document.querySelectorAll(".fd-trigger.open").forEach(t => t.classList.remove("open"));
+  }
+});
+
+function scrollBookmarks() {
+  const box = $("bookmarks");
+  box.scrollBy({ left: 260, behavior: "smooth" });
+}
+
+// 计算已激活的筛选条件数（用于折叠条上的徽标）
+function countActiveFilters() {
+  let n = 0;
+  if (filter !== "all") n++;
+  if (hotOnly) n++;
+  if (fMethod !== "all") n++;
+  if (fOrg !== "all") n++;
+  if (fRegion !== "all") n++;
+  if (fRecruit !== "all") n++;
+  if (fTime !== "all") n++;
+  if (fMark !== "all") n++;
+  if (fJieye !== "all") n++;
+  if (fAge !== "all") n++;
+  if (fParty !== "all") n++;
+  if (fMajor !== "all") n++;
+  if (!exTeacher) n++;
+  if (!exDoctor) n++;
+  if (!exMajor) n++;
+  if (!exNotice) n++;
+  if (showBlocked) n++;
+  if (showAllResults) n++;
+  if ($("q").value.trim()) n++;
+  return n;
+}
+
+function updateFilterBadge() {
+  const n = countActiveFilters();
+  const b = $("filterBadge");
+  b.textContent = n ? n + " 项筛选" : "";
+  b.classList.toggle("show", !!n);
+}
+
+function renderFilters() {
+  const box = $("filters");
+  box.innerHTML = "";
+  const mk = (id, label, cls) => {
+    const c = document.createElement("span");
+    c.className = "chip " + (cls || "");
+    c.textContent = label;
+    if (filter === id) c.classList.add("active");
+    c.onclick = () => { filter = id; renderFilters(); render(); };
+    box.appendChild(c);
+  };
+  mk("all", "全部");
+  mk("hot", "高分精选");
+  DATA.channels.forEach(ch => {
+    mk(ch.id, ch.name.length > 8 ? ch.name.slice(0, 7) + "…" : ch.name);
+  });
+}
+
+function toggleExclude(kind) {
+  if (kind === "teacher") { exTeacher = !exTeacher; $("exTeacher").classList.toggle("active", exTeacher); }
+  else if (kind === "doctor") { exDoctor = !exDoctor; $("exDoctor").classList.toggle("active", exDoctor); }
+  else if (kind === "major") { exMajor = !exMajor; $("exMajor").classList.toggle("active", exMajor); }
+  else { exNotice = !exNotice; $("exNotice").classList.toggle("active", exNotice); }
+  render();
+}
+
+function toggleShowBlocked() {
+  showBlocked = !showBlocked;
+  $("exShow").classList.toggle("active", showBlocked);
+  render();
+}
+
+function toggleShowAllResults() {
+  showAllResults = !showAllResults;
+  $("exShowAllResults").classList.toggle("active", showAllResults);
+  render();
+}
+
+function addTrack() {
+  const v = $("trackInput").value.trim();
+  if (!v) { showToast("请输入考试名称"); return; }
+  if (trackedExams.includes(v)) { showToast("已在追踪列表中"); return; }
+  fetch("/api/tracked", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "add", name: v }),
+  }).then(r => r.json()).then(d => {
+    trackedExams = d.exams;
+    $("trackInput").value = "";
+    renderTrackChips();
+    render();
+    showToast("已添加求职追踪");
+  });
+}
+
+function removeTrack(name) {
+  fetch("/api/tracked", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "remove", name: name }),
+  }).then(r => r.json()).then(d => {
+    trackedExams = d.exams;
+    renderTrackChips();
+    render();
+  });
+}
+
+function renderTrackChips() {
+  const box = $("trackChips");
+  box.innerHTML = "";
+  $("trackCount").textContent = trackedExams.length ? `已追踪 <b>${trackedExams.length}</b> 个（见更多条件）` : "暂无追踪";
+  if (!trackedExams.length) {
+    box.innerHTML = '<span class="track-hint" style="margin-left:0;padding:0 0 6px">追踪后，仅显示匹配该考试的聘用/录用结果公示；其余结果公示默认隐藏。</span>';
+    return;
+  }
+  trackedExams.forEach(name => {
+    const chip = document.createElement("span");
+    chip.className = "track-chip";
+    chip.innerHTML = `<span>${escapeHtml(name)}</span><span class="rm" title="取消追踪">✕</span>`;
+    chip.querySelector(".rm").onclick = () => removeTrack(name);
+    box.appendChild(chip);
+  });
+}
+
+// 归一化标题用于模糊匹配（去空白、去常见前后缀噪音词）
+function normTitle(s) {
+  return (s || "").replace(/[\s\u3000]/g, "")
+    .replace(/^(关于|深圳人社局|深圳市考试院|广东人社|广东组织工作网|广东人事考试局|广州人社局|东莞人社局|深圳国资委|高校人才网|本地宝|国聘|24365|全国事业单位招聘网)/, "")
+    .replace(/(拟聘|拟聘用|拟录用|人员|名单)?(公示|公告|的通知|的通知原文|的通知(原文)?)$/, "")
+    .replace(/([（(])(.*?)([）)])/g, "");
+}
+
+// 结果公示是否匹配某个追踪的考试（模糊匹配：去掉"关于/公示"等后，一方包含另一方）
+function resultMatchesTracked(item) {
+  if (!trackedExams.length) return false;
+  const t = normTitle(item.title);
+  if (!t) return false;
+  return trackedExams.some(name => {
+    const n = normTitle(name);
+    if (!n) return false;
+    return n.includes(t) || t.includes(n);
+  });
+}
+
+function pick(kind, val) {
+  if (kind === "method") fMethod = val;
+  else if (kind === "org") fOrg = val;
+  else if (kind === "region") fRegion = val;
+  else if (kind === "recruit") fRecruit = val;
+  else if (kind === "mark") fMark = val;
+  else if (kind === "jieye") fJieye = val;
+  else if (kind === "age") fAge = val;
+  else if (kind === "party") fParty = val;
+  else if (kind === "major") fMajor = val;
+  else fTime = val;
+  document.querySelectorAll(`.fp-chip, .fg-chip`).forEach(c => {
+    const hit = c.getAttribute("data-v") === val && isChipForKind(c, kind);
+    c.classList.toggle("active", hit);
+  });
+  render();
+}
+
+function isChipForKind(c, kind) {
+  const row = c.closest(".fp-row") || c.closest(".filter-group-body") || c.closest(".fd-body");
+  if (!row) return false;
+  const labels = { method: "投递方式", org: "单位类型", region: "地区", recruit: "校招/社招", time: "发布时间", mark: "标记", jieye: "招聘对象", age: "年龄上限", party: "党员要求", major: "专业对口" };
+  const label = row.querySelector(".fp-label");
+  if (label) return label.textContent === labels[kind];
+  // For fd-body, check the trigger label
+  const item = c.closest(".fd-item");
+  if (item) {
+    const trig = item.querySelector(".fd-trigger .fd-label");
+    if (trig) return trig.textContent.trim() === labels[kind];
+  }
+  // For filter-group-body, check the parent filter-group-head
+  const group = c.closest(".filter-group");
+  if (group) {
+    const head = group.querySelector(".fg-label");
+    if (head) {
+      const text = head.textContent.trim();
+      if (kind === "mark" && text.includes("标记")) return true;
+      if (kind === "time" && text.includes("发布时间")) return true;
+      if (kind === "org" && text.includes("单位类型")) return true;
+    }
+  }
+  return false;
+}
+
+function render() {
+  const q = $("q").value.trim().toLowerCase();
+  let items = DATA.items.slice();
+
+  // 排除逻辑：默认隐藏 blocked 岗位 + 政策/新闻通知；"显示已排除"开启时全部显示并标灰
+  const allItems = items;
+  if (!showBlocked) {
+    items = items.filter(i => {
+      if (i.blocked) return shouldUnblock(i);
+      if (i.kind === "notice") return !exNotice;
+      return true;
+    });
+  }
+
+  // 结果公示：默认隐藏，除非匹配考试追踪中的考试；"显示全部公示"开启时全显示
+  const allResultCount = allItems.filter(i => i.is_result).length;
+  const hiddenResults = showAllResults ? 0
+    : allItems.filter(i => i.is_result && !resultMatchesTracked(i)).length;
+  if (!showAllResults) {
+    items = items.filter(i => !i.is_result || resultMatchesTracked(i));
+  }
+
+  // 用户标记：删去的默认隐藏（除非在"已删去"筛选下）；待办/已办筛选
+  const markedHidden = allItems.filter(i => marks[i.fp] === "hidden").length;
+  items = items.filter(i => {
+    const m = marks[i.fp];
+    if (fMark === "hidden") return m === "hidden";
+    if (fMark === "待办") return m === "todo";
+    if (fMark === "已办") return m === "done";
+    return m !== "hidden";
+  });
+
+  if (filter === "hot") items = items.filter(i => i.score >= 5);
+  else if (filter !== "all") items = items.filter(i => i.channel === filter);
+
+  if (hotOnly) items = items.filter(i => i.score >= 5);
+  if (fMethod !== "all") items = items.filter(i => i.method === fMethod);
+  if (fOrg !== "all") items = items.filter(i => i.org === fOrg);
+  if (fRegion !== "all") items = items.filter(i => i.region === fRegion);
+  if (fRecruit !== "all") items = items.filter(i => i.recruit === fRecruit);
+  if (fJieye !== "all") items = items.filter(i => (i.screen || {}).jieye === fJieye);
+  if (fAge !== "all") items = items.filter(i => (i.screen || {}).age === fAge);
+  if (fParty !== "all") items = items.filter(i => (i.screen || {}).party === fParty);
+  if (fMajor !== "all") items = items.filter(i => (i.screen || {}).major === fMajor);
+  if (fTime !== "all") {
+    const cutoff = dayStart(timeRangeDays(fTime));
+    items = items.filter(i => {
+      if (!i.date) return false;
+      const d = new Date(i.date + "T00:00:00");
+      return !isNaN(d) && d >= cutoff;
+    });
+  }
+
+  if (q) {
+    items = items.filter(i => i.title.toLowerCase().includes(q));
+  }
+
+  // 排序：待办/已办置顶 → score 降序 → 日期降序 → 渠道 tier
+  items.sort((a, b) => markRank(a) - markRank(b) || b.score - a.score
+    || (b.date || "").localeCompare(a.date || "") || a.tier - b.tier);
+
+  const total = allItems.length;
+  const blockedCount = allItems.filter(i => i.blocked).length;
+  const noticeCount = allItems.filter(i => i.kind === "notice").length;
+  let stats = `<span class="sbadge">显示 <b>${items.length}</b> / ${total} 条</span>`;
+  const todoCount = allItems.filter(i => marks[i.fp] === "todo").length;
+  if (todoCount) stats += `<span class="sbadge acc">待办 <b>${todoCount}</b></span>`;
+  if (blockedCount) stats += `<span class="sbadge hot">已排除 <b>${blockedCount}</b></span>`;
+  if (noticeCount && exNotice) stats += `<span class="sbadge mut">政策/新闻 <b>${noticeCount}</b></span>`;
+  if (hiddenResults) stats += `<span class="sbadge acc">隐藏公示 <b>${hiddenResults}</b></span>`;
+  if (markedHidden && fMark !== "hidden") stats += `<span class="sbadge hot">已删去 <b>${markedHidden}</b></span>`;
+  $("stats").innerHTML = stats;
+  updateFilterBadge();
+
+  const list = $("list");
+  list.innerHTML = "";
+  if (!items.length) {
+    list.innerHTML = '<div class="empty">没有符合条件的公告</div>';
+    return;
+  }
+
+  // 第一梯队：合并为一个卡片，不按来源分组（来源弱化），组内按优先级呈现
+  const tier1 = items.filter(i => i.tier === 1);
+  const rest = items.filter(i => i.tier !== 1);
+  const group = {};
+  rest.forEach(i => { (group[i.channel_name] = group[i.channel_name] || []).push(i); });
+
+  // 梯队 2→3 分组排序；同梯队内按渠道配置顺序
+  const chIndex = {};
+  DATA.channels.forEach((c, i) => chIndex[c.name] = i);
+  const tierOf = cn => (group[cn][0] && group[cn][0].tier) || 99;
+  const order = Object.keys(group).sort((a, b) =>
+    tierOf(a) - tierOf(b) || (chIndex[a] ?? 999) - (chIndex[b] ?? 999));
+
+  if (tier1.length) {
+    const sec = document.createElement("div");
+    sec.className = "channel-group tier1-group";
+    const tag = `<span class="tier-tag t1">${T("tierLabel", 1)}</span>`;
+    sec.innerHTML = `<div class="channel-head">${tag}优先级精选 <span class="cnt">${tier1.length} 条</span></div>`;
+    tier1.forEach(it => sec.appendChild(makeItem(it)));
+    list.appendChild(sec);
+  }
+
+  order.forEach(cn => {
+    const arr = group[cn];
+    const tier = arr[0].tier;
+    const sec = document.createElement("div");
+    sec.className = "channel-group";
+    const tierTag = tier ? `<span class="tier-tag t${tier}">${T("tierLabel", tier)}</span>` : "";
+    sec.innerHTML = `<div class="channel-head">${tierTag}${cn} <span class="cnt">${arr.length} 条</span></div>`;
+    arr.forEach(it => sec.appendChild(makeItem(it)));
+    list.appendChild(sec);
+  });
+}
+
+// 当前勾选的排除项对应的岗位类型；未知原因（详情级筛选如 年龄/党员）默认隐藏，仅在"显示已排除"下展示
+function shouldUnblock(i) {
+  if (i.block_reason === "中小学岗") return !exTeacher;
+  if (i.block_reason === "博士岗") return !exDoctor;
+  if (i.block_reason === "专业不符") return !exMajor;
+  return false;
+}
+
+const TIER_LABELS = { 1: "第一梯队", 2: "第二梯队", 3: "第三梯队", 4: "第四梯队", 5: "第五梯队" };
+function T(k, tier) { return TIER_LABELS[tier] || ""; }
+
+function timeRangeDays(label) {
+  return { "当日": 0, "近3天": 2, "近1周": 6, "近1月": 29, "近3月": 89 }[label] ?? 0;
+}
+
+// 今天往前 offset 天（含今天）的 0 点，用于日历日筛选
+function dayStart(offsetDays) {
+  const now = new Date();
+  const d = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  d.setDate(d.getDate() - offsetDays);
+  return d;
+}
+
+// 标记排序权重：待办=0 已办=1 未标记=2
+function markRank(i) {
+  const m = marks[i.fp];
+  return m === "todo" ? 0 : m === "done" ? 1 : 2;
+}
+
+const MARK_BTN = { todo: "去投递", done: "标记完成", hidden: "✕" };
+const MARK_TIP = { todo: "待办", done: "已办", hidden: "删去" };
+const MARK_ACTIVE = { todo: "m-todo", done: "m-done", hidden: "m-hidden" };
+const MARK_ICON = {
+  todo: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" stroke-linejoin="miter"><path d="M4 12h13"/><path d="M12 5l7 7-7 7"/></svg>',
+  done: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" stroke-linejoin="miter"><path d="M4 13l5 5 11-11"/></svg>',
+  hidden: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" stroke-linejoin="miter"><path d="M5 5l14 14"/><path d="M19 5L5 19"/></svg>'
+};
+
+function makeItem(it) {
+  const wrap = document.createElement("div");
+  wrap.className = "item-wrap";
+  const a = document.createElement("a");
+  const muted = (it.blocked || it.kind === "notice") ? " blocked-item" : "";
+  const markCls = marks[it.fp] ? " mark-" + marks[it.fp] : "";
+  const customCls = it.custom ? " custom-item" : "";
+  a.className = "item" + muted + markCls + customCls;
+  a.href = it.url; a.target = "_blank";
+  a.title = it.title;
+  a.oncontextmenu = (e) => { e.preventDefault(); e.stopPropagation(); showCtxMenu(e, it); };
+
+  // 左侧编号圆圈：tier 色 / 高分红色
+  const numCls = it.score >= 5 ? " hotn" : (it.tier ? " t" + it.tier + "n" : "");
+  const numLabel = it.score >= 5 ? "★" : (it.tier || "?");
+
+  // 高亮标题关键词
+  let title = escapeHtml(it.title);
+  if (it.keywords && it.keywords.length) {
+    it.keywords.forEach(kw => {
+      const idx = title.indexOf(escapeHtml(kw));
+      if (idx >= 0) {
+        const cls = KEYWORDS.priority.includes(kw) ? "hl" : "hl blue";
+        title = title.replace(escapeHtml(kw), `<span class="${cls}">${escapeHtml(kw)}</span>`);
+      }
+    });
+  }
+
+  // 副标题行：更具描述性
+  const subParts = [];
+  if (it.region) subParts.push(it.region);
+  if (it.tier) subParts.push("第" + ["一","二","三","四","五"][it.tier - 1] + "梯队");
+  if (it.method) subParts.push(it.method);
+  if (it.recruit && it.recruit !== "未标注") subParts.push(it.recruit);
+  const subtitle = subParts.join(" · ");
+
+  // 底部标签：精简、去冗余，日期移入标签行
+  const tags = [];
+  if (it.date) tags.push(`<span class="tag date-tag">${it.date}</span>`);
+  tags.push(`<span class="tag method-${clsOfMethod(it.method)}">${it.method}</span>`);
+  if (it.recruit && it.recruit !== "未标注") tags.push(`<span class="tag recruit-${clsOfRecruit(it.recruit)}">${it.recruit}</span>`);
+  tags.push(`<span class="tag org-${clsOfOrg(it.org)}">${it.org}</span>`);
+  if (it.region) tags.push(`<span class="tag region">${it.region}</span>`);
+  if (it.custom) tags.push(`<span class="tag recruit-both">自定义</span>`);
+  if (it.attach_hit && it.attach_hit.length) tags.push(`<span class="tag region" title="${escapeHtml(it.attach_hit.join("、"))}">附件含招聘</span>`);
+  if (it.is_doctor) tags.push(`<span class="tag exclude">博士岗</span>`);
+  if (it.kind === "notice") tags.push(`<span class="tag exclude">政策/新闻</span>`);
+  if (it.is_result) tags.push(`<span class="tag region">${resultMatchesTracked(it) ? "已追踪" : "未追踪公示"}</span>`);
+  if (it.blocked) tags.push(`<span class="tag exclude" title="画像核对不匹配，默认隐藏">已排除·${it.block_reason}</span>`);
+  if (it.screen_reasons && it.screen_reasons.length) {
+    tags.push(`<span class="tag exclude">${it.screen_reasons.join("、")}</span>`);
+  }
+  const sc = it.screen || {};
+  if (sc.jieye && sc.jieye !== "未标注") tags.push(`<span class="tag screen">${sc.jieye}</span>`);
+  if (sc.age && sc.age !== "未标注") {
+    tags.push(`<span class="tag screen${sc.age_ok === false ? " age30" : ""}">年龄${sc.age}</span>`);
+  }
+  if (sc.party && sc.party !== "未标注") {
+    tags.push(`<span class="tag screen${sc.party_ok === false ? " party" : ""}">${sc.party}</span>`);
+  }
+  if (sc.major === "对口" || sc.major === "相关" || sc.major === "未解析") {
+    const cls = sc.major === "对口" ? " major" : (sc.major === "相关" ? " majorrel" : " majorunk");
+    const label = sc.major === "对口" ? "专业对口" : (sc.major === "相关" ? "专业相关" : "专业未解析");
+    tags.push(`<span class="tag screen${cls}" title="${escapeHtml((sc.major_hit || []).join("、"))}">${label}</span>`);
+  }
+
+  // 编号圆圈
+  const num = document.createElement("span");
+  num.className = "item-num" + numCls;
+  num.textContent = numLabel;
+
+  // 内容区
+  const body = document.createElement("span");
+  body.className = "item-body";
+  let badgeHtml = "";
+  if (it.score >= 5) badgeHtml = '<span class="item-badge hot">HOT</span>';
+  else if (it.date) {
+    const d = new Date(it.date);
+    const diff = Math.floor((Date.now() - d.getTime()) / 86400000);
+    if (diff <= 7) badgeHtml = '<span class="item-badge new">NEW</span>';
+  }
+  body.innerHTML = `
+    <div class="item-top">
+      <span class="item-title">${title}</span>
+      ${badgeHtml}
+    </div>
+    ${subtitle ? `<div class="item-sub">${escapeHtml(subtitle)}</div>` : ""}
+    <div class="item-bottom" title="${escapeHtml(tags.join(" ").replace(/<[^>]+>/g, ""))}">${tags.join("")}</div>`;
+
+  // 操作按钮：圆形图标 + 文字标签
+  const acts = document.createElement("span");
+  acts.className = "item-actions";
+  ["todo", "done"].forEach(m => {
+    const b = document.createElement("span");
+    const cur = marks[it.fp];
+    b.className = "ia " + MARK_ACTIVE[m] + (cur === m ? " active" : "");
+    b.innerHTML = `<span class="ia-icon">${MARK_ICON[m]}</span><span class="ia-label">${MARK_BTN[m]}</span>`;
+    b.title = cur === m ? "取消" + MARK_TIP[m] : "标记为" + MARK_TIP[m];
+    b.onclick = (e) => { e.preventDefault(); e.stopPropagation(); toggleMark(it.fp, m); };
+    acts.appendChild(b);
+  });
+
+  a.appendChild(num);
+  a.appendChild(body);
+  a.appendChild(acts);
+  wrap.appendChild(a);
+  return wrap;
+}
+
+function toggleMark(fp, mark) {
+  const cur = marks[fp];
+  const next = cur === mark ? null : mark;
+  fetch("/api/marks", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: next ? "set" : "clear", fp: fp, mark: mark }),
+  }).then(r => r.json()).then(d => {
+    marks = d.marks;
+    render();
+    if (next) showToast("已标记");
+    else showToast("已取消标记");
+  });
+}
+
+function addCustom() {
+  const url = $("customUrl").value.trim();
+  const title = $("customTitle").value.trim();
+  if (!url) { showToast("请输入公告链接"); return; }
+  fetch("/api/custom", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url: url, title: title }),
+  }).then(r => r.json()).then(d => {
+    if (d.ok) {
+      $("customUrl").value = ""; $("customTitle").value = "";
+      showToast("已添加自定义公告");
+      init();
+    } else {
+      showToast(d.error || "添加失败");
+    }
+  }).catch(() => showToast("添加失败"));
+}
+
+function delCustom(fp) {
+  if (!confirm("确认删除该自定义公告？")) return;
+  fetch("/api/custom", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ fp: fp }),
+  }).then(r => r.json()).then(() => { init(); showToast("已删除"); });
+}
+
+function clsOfMethod(m) {
+  return m === "考试公告" ? "exam" : m === "直接投递" ? "direct" : "result";
+}
+function clsOfOrg(o) {
+  return o === "高校" ? "hq" : o === "事业单位" ? "sydw" : o === "国企" ? "gq" : o === "央企" ? "yq" : "other";
+}
+function clsOfRecruit(r) {
+  return r === "校招" ? "school" : r === "社招" ? "social" : "both";
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function refresh() {
+  if (loading) return;
+  loading = true;
+  const btn = document.querySelector('.btn.primary');
+  btn.classList.add("loading");
+  btn.disabled = true;
+  fetch("/api/refresh", { method: "POST" }).then(r => r.json()).then(() => {
+    // 轮询数据直到刷新完成（updated 变化），最多等 6 分钟
+    const before = (DATA && DATA.updated) || "";
+    const started = Date.now();
+    const timer = setInterval(() => {
+      fetch("/api/data").then(r => r.json()).then(d => {
+        if (d.updated && d.updated !== before) {
+          clearInterval(timer);
+          DATA = d;
+          marks = d.marks || {};
+          $("updated").textContent = d.updated;
+          $("total").textContent = d.items.length;
+          renderBookmarks();
+          renderFilters();
+          renderTrackChips();
+          render();
+          finishRefresh(btn, "已更新至 " + d.updated);
+        } else if (Date.now() - started > 6 * 60 * 1000) {
+          clearInterval(timer);
+          finishRefresh(btn, "刷新超时，已显示当前数据");
+        }
+      }).catch(() => {});
+    }, 3000);
+  }).catch(() => finishRefresh(btn, "刷新失败"));
+}
+
+function finishRefresh(btn, msg) {
+  loading = false;
+  btn.classList.remove("loading");
+  btn.disabled = false;
+  showToast(msg);
+}
+
+function toggleHotOnly() { hotOnly = !hotOnly; render(); }
+function clearSearch() { $("q").value = ""; render(); }
+
+function showToast(msg) {
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+// 右下角悬浮搜索
+function toggleSearch() {
+  const pop = $("searchPop");
+  const open = pop.classList.toggle("open");
+  $("searchFab").querySelector(".fab-btn").title = open ? "收起" : "搜索公告";
+  if (open) $("q").focus();
+}
+document.addEventListener("click", (e) => {
+  const pop = $("searchPop");
+  if (pop.classList.contains("open") && !pop.contains(e.target) && !$("searchFab").contains(e.target)) {
+    pop.classList.remove("open");
+  }
+});
+
+// 右键菜单
+let ctxItem = null;
+function showCtxMenu(e, it) {
+  ctxItem = it;
+  const menu = $("ctxMenu");
+  menu.style.left = Math.min(e.clientX, innerWidth - menu.offsetWidth - 8) + "px";
+  menu.style.top = Math.min(e.clientY, innerHeight - menu.offsetHeight - 8) + "px";
+  menu.classList.add("open");
+}
+function hideCtxMenu() { $("ctxMenu").classList.remove("open"); }
+function ctxAction(action) {
+  hideCtxMenu();
+  const it = ctxItem;
+  if (!it) return;
+  if (action === "copy") {
+    navigator.clipboard.writeText(it.url).then(
+      () => showToast("已复制原网址"),
+      () => { const ta = document.createElement("textarea"); ta.value = it.url; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); showToast("已复制原网址"); }
+    );
+  } else if (action === "del") {
+    if (it.custom) delCustom(it.fp);
+    else toggleMark(it.fp, "hidden");
+  }
+}
+document.addEventListener("click", hideCtxMenu);
+document.addEventListener("contextmenu", hideCtxMenu);
+
+function askRefresh(updated) {
+  $("modalUpdated").textContent = updated || "--";
+  $("refreshModal").style.display = "flex";
+}
+
+function closeRefreshModal() {
+  $("refreshModal").style.display = "none";
+}
+
+function refreshFromModal() {
+  closeRefreshModal();
+  refresh();
+}
+
+init();
+</script>
+</body>
+</html>

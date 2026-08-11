@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stitch 风格预览</title>
+<style>
+:root{--bg:#F4F7FA;--card:#FFFFFF;--border:#DCE6F0;--text:#1B2A41;--muted:#5B6B7B;--accent:#2F6FBA;--accent-bg:#E9F2FC;--dark:#1B2A41;--hot:#C44D4D;--hot-bg:#FDF0F0;--good:#2E7D5B;--good-bg:#E7F4EE}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* ═══ HEADER ═══ */
+.header{background:linear-gradient(135deg,#F0F7FF 0%,#E8F2FC 100%);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(8px)}
+.hdr-left{display:flex;align-items:center;gap:10px}
+.hdr-logo{font-size:16px;font-weight:800;color:var(--dark);letter-spacing:-.5px}
+.hdr-logo span{color:var(--accent)}
+.hdr-divider{width:1px;height:16px;background:var(--border)}
+.hdr-subtitle{font-size:12px;color:var(--muted);letter-spacing:.3px}
+.hdr-right{display:flex;align-items:center;gap:14px;font-size:12px;color:var(--muted)}
+.hdr-right .update-time{color:var(--muted)}
+.hdr-right .total{color:var(--accent);font-weight:600}
+.hdr-btn{padding:5px 14px;border-radius:16px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--text);transition:all .2s}
+.hdr-btn:hover{border-color:var(--accent);color:var(--accent)}
+.hdr-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.hdr-btn.primary:hover{background:#2563EB}
+
+/* ═══ HERO ═══ */
+.hero{background:linear-gradient(135deg,#FFFFFF 0%,#E8F2FC 100%);padding:48px 24px 40px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;right:-120px;top:-120px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(47,111,186,.08) 0%,transparent 70%);pointer-events:none}
+.hero-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:start}
+.hero-tag{font-size:12px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;font-weight:700;display:block;margin-bottom:12px}
+.hero-title{font-size:36px;font-weight:800;line-height:1.2;margin-bottom:8px;color:var(--dark);letter-spacing:-.5px}
+.hero-title em{font-style:normal;color:var(--accent)}
+.hero-sub{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:20px;max-width:520px}
+.hero-search{display:flex;gap:0;max-width:520px;margin-bottom:20px}
+.hero-search input{flex:1;padding:12px 20px;border:2px solid var(--border);border-radius:24px 0 0 24px;font-size:14px;outline:none;background:#fff;transition:all .2s}
+.hero-search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.hero-search button{padding:12px 28px;background:var(--accent);color:#fff;border:none;border-radius:0 24px 24px 0;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s}
+.hero-search button:hover{background:#2563EB}
+
+/* ═══ STATS PANEL (right side) ═══ */
+.stats-panel{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 4px 20px rgba(27,42,65,.08)}
+.sp-title{font-size:14px;font-weight:700;margin-bottom:16px;color:var(--dark)}
+.sp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sp-card{border-radius:12px;padding:14px;position:relative;overflow:hidden}
+.sp-card.blue{background:linear-gradient(135deg,#2F6FBA,#1D4ED8);color:#fff}
+.sp-card.light{background:var(--accent-bg)}
+.sp-card .label{font-size:11px;opacity:.85;margin-bottom:4px}
+.sp-card .value{font-size:22px;font-weight:800}
+.sp-card .sub{font-size:10px;opacity:.7;margin-top:2px}
+.sp-card.trend{display:flex;align-items:center;justify-content:space-between}
+.sp-card.trend .chart{width:80px;height:36px}
+.sp-card.list-card{grid-column:1/-1}
+.sp-card.list-card .item{font-size:12px;color:var(--text);padding:4px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
+.sp-card.list-card .item:last-child{border-bottom:none}
+.sp-card.list-card .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+
+/* ═══ BOOKMARKS ═══ */
+.bookmarks-section{max-width:1200px;margin:0 auto;padding:0 24px}
+.bm-head-stitch{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.bm-head-stitch h2{font-size:16px;font-weight:700;color:var(--dark)}
+.bm-head-stitch .hint{font-size:12px;color:var(--muted)}
+.bm-carousel{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.bm-carousel::-webkit-scrollbar{display:none}
+.bm-card{flex-shrink:0;width:130px;border:1px solid var(--border);border-radius:14px;padding:16px 12px;text-align:center;background:#fff;cursor:pointer;transition:all .2s;text-decoration:none;color:var(--text)}
+.bm-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 6px 16px rgba(47,111,186,.12)}
+.bm-card-icon{width:48px;height:48px;border-radius:12px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;overflow:hidden}
+.bm-card-icon img{width:100%;height:100%;object-fit:contain;border-radius:12px}
+.bm-card-name{font-size:13px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bm-card-url{font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.scroll-indicator{text-align:center;padding:16px 0;color:var(--muted);font-size:13px;cursor:pointer}
+.scroll-indicator:hover{color:var(--accent)}
+
+/* ═══ FILTERS ═══ */
+.filters-section{max-width:1200px;margin:0 auto;padding:16px 24px}
+.filter-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.filter-header h3{font-size:15px;font-weight:700;color:var(--dark)}
+.filter-header .toggle{font-size:12px;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:4px}
+.filter-group{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:8px;overflow:hidden}
+.filter-group-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;user-select:none;transition:background .2s}
+.filter-group-head:hover{background:var(--accent-bg)}
+.filter-group-head .fg-label{font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px}
+.filter-group-head .fg-label .icon{font-size:14px}
+.filter-group-head .fg-arrow{font-size:12px;color:var(--muted);transition:transform .2s}
+.filter-group-head.open .fg-arrow{transform:rotate(180deg)}
+.filter-group-body{padding:0 16px 12px;display:flex;flex-wrap:wrap;gap:6px}
+.filter-group-body.collapsed{display:none}
+.fg-chip{padding:5px 12px;border:1px solid var(--border);border-radius:20px;font-size:12px;cursor:pointer;background:#fff;transition:all .2s;user-select:none}
+.fg-chip:hover{border-color:var(--accent)}
+.fg-chip.active{background:var(--accent-bg);color:var(--accent);border-color:var(--accent);font-weight:600}
+
+/* ═══ LIST ═══ */
+.list-section{max-width:1200px;margin:0 auto;padding:0 24px 40px}
+.list-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.list-head h3{font-size:15px;font-weight:700;color:var(--dark)}
+.list-head .new-badge{background:var(--hot);color:#fff;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
+.list-head .count{font-size:12px;color:var(--muted)}
+.ann-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:flex-start;gap:0;transition:all .2s;position:relative;border-left:3px solid transparent}
+.ann-card:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(47,111,186,.08)}
+.ann-card.hot{border-left-color:var(--hot)}
+.ann-card.new{border-left-color:var(--accent)}
+.ann-body{flex:1;min-width:0}
+.ann-title{font-size:14px;font-weight:600;line-height:1.5;margin-bottom:4px;color:var(--dark)}
+.ann-title .kw{color:var(--hot)}
+.ann-title .tag{display:inline-block;font-size:10px;padding:1px 6px;border-radius:8px;margin-left:6px;font-weight:600;vertical-align:middle}
+.ann-title .tag.hot{background:var(--hot-bg);color:var(--hot)}
+.ann-title .tag.new{background:var(--accent-bg);color:var(--accent)}
+.ann-meta{font-size:12px;color:var(--muted);margin-bottom:6px}
+.ann-tags{display:flex;gap:4px;flex-wrap:wrap}
+.ann-tag{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--accent-bg);color:var(--accent);font-weight:500}
+.ann-tag.method{background:#F0F7FF;color:#2F6FBA}
+.ann-tag.org{background:#FFF7ED;color:#C2410C}
+.ann-tag.region{background:#F0FDF4;color:#15803D}
+.ann-tag.hot-tag{background:var(--hot-bg);color:var(--hot)}
+.ann-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0;padding-left:12px;align-items:center}
+.ann-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:14px}
+.ann-btn:hover{border-color:var(--accent);background:var(--accent-bg);color:var(--accent)}
+.ann-btn.filled{background:var(--accent);color:#fff;border-color:var(--accent)}
+.ann-btn.filled:hover{background:#2563EB}
+.ann-btn-label{font-size:9px;color:var(--muted);text-align:center;margin-top:-2px}
+
+/* ═══ FAB ═══ */
+.fab{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:8px;z-index:50}
+.fab-btn{width:48px;height:48px;border-radius:50%;border:none;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(47,111,186,.3);transition:all .2s;font-size:18px}
+.fab-btn:hover{background:#2563EB;transform:scale(1.05)}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr}
+  .stats-panel{display:none}
+}
+@media(max-width:600px){
+  .header{flex-wrap:wrap;gap:8px}
+  .hdr-right{flex-wrap:wrap}
+  .hero-title{font-size:28px}
+}
+
+.page-label{max-width:1200px;margin:0 auto;padding:24px 24px 8px;font-size:12px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-weight:600}
+.section-divider{max-width:1200px;margin:0 auto;padding:0 24px}
+.section-divider hr{border:none;border-top:1px solid var(--border);margin:8px 0}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header class="header">
+  <div class="hdr-left">
+    <div class="hdr-logo"><span>考编</span>公告聚合</div>
+    <div class="hdr-divider"></div>
+    <div class="hdr-subtitle">深圳 · 广东 · 考试通道</div>
+  </div>
+  <div class="hdr-right">
+    <span class="update-time">更新 2026-08-08 13:08:45</span>
+    <span>|</span>
+    <span>共 <span class="total">417</span> 条</span>
+    <span>|</span>
+    <span>每 3 小时</span>
+    <button class="hdr-btn primary">立即刷新</button>
+    <button class="hdr-btn">只看高分</button>
+    <button class="hdr-btn">清空搜索</button>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <span class="hero-tag">考编 · 深圳 · 广东</span>
+      <h1 class="hero-title">找到最适合你的<br><em>体制内机会</em></h1>
+      <p class="hero-sub">自动聚合 14 个渠道、400+ 公告，按你的画像智能筛选，不错过任何一个上岸机会。</p>
+      <div class="hero-search">
+        <input type="text" placeholder="搜索职位、地区或公司...">
+        <button>快速搜索</button>
+      </div>
+    </div>
+    <div class="stats-panel">
+      <div class="sp-title">实时招聘动态与趋势</div>
+      <div class="sp-grid">
+        <div class="sp-card blue">
+          <div class="label">今日新增公告：</div>
+          <div class="value">+120</div>
+        </div>
+        <div class="sp-card light">
+          <div class="label">近期热度趋势 ↗</div>
+          <svg class="chart" viewBox="0 0 80 36" style="width:100%;height:36px;margin-top:6px">
+            <polyline points="0,30 10,25 20,28 30,18 40,20 50,12 60,14 70,6 80,8" fill="none" stroke="#2F6FBA" stroke-width="2"/>
+            <polyline points="0,30 10,25 20,28 30,18 40,20 50,12 60,14 70,6 80,8 80,36 0,36" fill="url(#grad)" stroke="none"/>
+            <defs><linearGradient id="grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2F6FBA" stop-opacity=".2"/><stop offset="100%" stop-color="#2F6FBA" stop-opacity="0"/></linearGradient></defs>
+          </svg>
+        </div>
+        <div class="sp-card light" style="grid-column:1">
+          <div class="label">今日新增公告</div>
+          <div style="display:flex;gap:3px;align-items:flex-end;height:36px;margin-top:6px">
+            <div style="width:12px;height:18px;background:#2F6FBA;border-radius:3px"></div>
+            <div style="width:12px;height:28px;background:#2F6FBA;border-radius:3px;opacity:.8"></div>
+            <div style="width:12px;height:22px;background:#2F6FBA;border-radius:3px;opacity:.6"></div>
+            <div style="width:12px;height:32px;background:#2F6FBA;border-radius:3px"></div>
+            <div style="width:12px;height:16px;background:#2F6FBA;border-radius:3px;opacity:.7"></div>
+          </div>
+        </div>
+        <div class="sp-card list-card">
+          <div class="label">最新发布</div>
+          <div class="item"><span class="dot"></span>深圳市教育局教师招聘</div>
+          <div class="item"><span class="dot"></span>广东省公务员考试公告</div>
+          <div class="item"><span class="dot"></span>广州市事业单位招聘</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BOOKMARKS: 常驻入口 ═══ -->
+<div class="page-label">常驻入口</div>
+<div class="bookmarks-section">
+  <div class="bm-carousel">
+    <a class="bm-card" href="http://bm.scs.gov.cn/pp/gkweb/njbm" target="_blank">
+      <div class="bm-card-icon" style="background:#C41230;font-size:16px">国</div>
+      <div class="bm-card-name">国家公务员局</div>
+      <div class="bm-card-url">bm.scs.gov.cn</div>
+    </a>
+    <a class="bm-card" href="https://hrss.sz.gov.cn" target="_blank">
+      <div class="bm-card-icon" style="background:#1D4ED8;font-size:16px">深</div>
+      <div class="bm-card-name">深圳市人社局</div>
+      <div class="bm-card-url">hrss.sz.gov.cn</div>
+    </a>
+    <a class="bm-card" href="http://gd.gov.cn" target="_blank">
+      <div class="bm-card-icon" style="background:#2E7D5B;font-size:16px">粤</div>
+      <div class="bm-card-name">广东省人民政府</div>
+      <div class="bm-card-url">gd.gov.cn</div>
+    </a>
+    <a class="bm-card" href="https://rsj.sz.gov.cn/" target="_blank">
+      <div class="bm-card-icon" style="background:#0E3A5C">深</div>
+      <div class="bm-card-name">深圳市人社局</div>
+      <div class="bm-card-url">rsj.sz.gov.cn</div>
+    </a>
+    <a class="bm-card" href="http://hrss.gd.gov.cn/" target="_blank">
+      <div class="bm-card-icon" style="background:#1D4ED8">粤</div>
+      <div class="bm-card-name">广东省人社厅</div>
+      <div class="bm-card-url">hrss.gd.gov.cn</div>
+    </a>
+    <a class="bm-card" href="http://gkrsrc.sz.gov.cn/" target="_blank">
+      <div class="bm-card-icon" style="background:#2563EB">招</div>
+      <div class="bm-card-name">深圳人才集团</div>
+      <div class="bm-card-url">gkrsrc.sz.gov.cn</div>
+    </a>
+    <a class="bm-card" href="https://www.szgkrsrc.com/" target="_blank">
+      <div class="bm-card-icon" style="background:#0369A1">国</div>
+      <div class="bm-card-name">深国国企</div>
+      <div class="bm-card-url">szgkrsrc.com</div>
+    </a>
+    <a class="bm-card" href="https://www.ggfwhrss.sz.gov.cn/" target="_blank">
+      <div class="bm-card-icon" style="background:#4A7FBF">事</div>
+      <div class="bm-card-name">深圳公共就业</div>
+      <div class="bm-card-url">ggfwhrss.sz.gov.cn</div>
+    </a>
+    <a class="bm-card" href="https://www.scs.gov.cn/" target="_blank">
+      <div class="bm-card-icon" style="background:#0E3A5C">国</div>
+      <div class="bm-card-name">国家公务员局</div>
+      <div class="bm-card-url">scs.gov.cn</div>
+    </a>
+    <a class="bm-card" href="https://chinagwy.org/html/gdzk/guangdong/" target="_blank">
+      <div class="bm-card-icon" style="background:#1E40AF">考</div>
+      <div class="bm-card-name">广东公务员考试网</div>
+      <div class="bm-card-url">chinagwy.org</div>
+    </a>
+    <a class="bm-card" href="https://www.gdkszk.com/" target="_blank">
+      <div class="bm-card-icon" style="background:#2F6FBA">事</div>
+      <div class="bm-card-name">广东事业单位考试</div>
+      <div class="bm-card-url">gdkszk.com</div>
+    </a>
+  </div>
+</div>
+<div class="scroll-indicator" onclick="document.getElementById('filters').scrollIntoView({behavior:'smooth'})">
+  <span>↓ 下滑浏览</span>
+</div>
+
+<div class="section-divider"><hr></div>
+
+<!-- ═══ FILTERS: Stitch 风格折叠面板 ═══ -->
+<div class="filters-section" id="filters">
+  <div class="filter-header">
+    <h3>筛选条件</h3>
+    <span class="toggle">隐藏筛选 ▴</span>
+  </div>
+
+  <!-- 地点 - 默认折叠 -->
+  <div class="filter-group">
+    <div class="filter-group-head" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('collapsed')">
+      <span class="fg-label"><span class="icon">📍</span> 地点</span>
+      <span class="fg-arrow">▾</span>
+    </div>
+    <div class="filter-group-body collapsed">
+      <span class="fg-chip active">全部</span>
+      <span class="fg-chip">深圳</span>
+      <span class="fg-chip">广州</span>
+      <span class="fg-chip">东莞</span>
+      <span class="fg-chip">珠海</span>
+      <span class="fg-chip">佛山</span>
+      <span class="fg-chip">全省/省直</span>
+      <span class="fg-chip">全国</span>
+    </div>
+  </div>
+
+  <!-- 岗位 - 默认折叠 -->
+  <div class="filter-group">
+    <div class="filter-group-head" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('collapsed')">
+      <span class="fg-label"><span class="icon">💼</span> 岗位</span>
+      <span class="fg-arrow">▾</span>
+    </div>
+    <div class="filter-group-body collapsed">
+      <span class="fg-chip active">全部</span>
+      <span class="fg-chip">考试公告</span>
+      <span class="fg-chip">直接投递</span>
+      <span class="fg-chip">结果公示</span>
+    </div>
+  </div>
+
+  <!-- 发布时间 - 默认展开 -->
+  <div class="filter-group">
+    <div class="filter-group-head open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('collapsed')">
+      <span class="fg-label"><span class="icon">📅</span> 发布时间</span>
+      <span class="fg-arrow">▴</span>
+    </div>
+    <div class="filter-group-body">
+      <span class="fg-chip active">全部</span>
+      <span class="fg-chip">近3月</span>
+      <span class="fg-chip">近1月</span>
+      <span class="fg-chip">近1周</span>
+      <span class="fg-chip">近3天</span>
+      <span class="fg-chip">当日</span>
+    </div>
+  </div>
+
+  <!-- 单位类型 - 默认展开 -->
+  <div class="filter-group">
+    <div class="filter-group-head open" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('collapsed')">
+      <span class="fg-label"><span class="icon">🏢</span> 单位类型</span>
+      <span class="fg-arrow">▴</span>
+    </div>
+    <div class="filter-group-body">
+      <span class="fg-chip active">全部</span>
+      <span class="fg-chip">事业单位</span>
+      <span class="fg-chip">高校</span>
+      <span class="fg-chip">国企</span>
+      <span class="fg-chip">央企</span>
+      <span class="fg-chip">其他</span>
+    </div>
+  </div>
+
+  <!-- 更多条件 - 默认折叠 -->
+  <div class="filter-group">
+    <div class="filter-group-head" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('collapsed')">
+      <span class="fg-label"><span class="icon">⋯</span> 更多条件</span>
+      <span class="fg-arrow">▾</span>
+    </div>
+    <div class="filter-group-body collapsed">
+      <span class="fg-chip active">全部</span>
+      <span class="fg-chip">投递方式</span>
+      <span class="fg-chip">校招/社招</span>
+      <span class="fg-chip">地区</span>
+      <span class="fg-chip">招聘对象</span>
+      <span class="fg-chip">政治面貌</span>
+      <span class="fg-chip">专业</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ANNOUNCEMENT LIST ═══ -->
+<div class="list-section">
+  <div class="list-head">
+    <h3>优选精选</h3>
+    <span class="new-badge">NEW</span>
+    <span class="count">14 条</span>
+  </div>
+
+  <div class="ann-card hot">
+    <div class="ann-body">
+      <div class="ann-title">
+        广州中医药大学2026年第二批<span class="kw">公开招</span>聘工作人员公告
+        <span class="tag hot">HOT</span>
+      </div>
+      <div class="ann-meta">广州 · 第一梯队 · 考试公告</div>
+      <div class="ann-tags">
+        <span class="ann-tag">2026-08-06</span>
+        <span class="ann-tag method">考试公告</span>
+        <span class="ann-tag org">高校</span>
+        <span class="ann-tag region">广州</span>
+        <span class="ann-tag">附件含招聘</span>
+        <span class="ann-tag">社招</span>
+        <span class="ann-tag">专业未解析</span>
+      </div>
+    </div>
+    <div class="ann-actions">
+      <div><div class="ann-btn filled">→</div><div class="ann-btn-label">去投递</div></div>
+      <div><div class="ann-btn">✓</div><div class="ann-btn-label">标记完成</div></div>
+    </div>
+  </div>
+
+  <div class="ann-card new">
+    <div class="ann-body">
+      <div class="ann-title">
+        南方医科大<span class="kw">学</span>2026年<span class="kw">公开招</span>聘附属医院工作人员公告
+        <span class="tag new">NEW</span>
+      </div>
+      <div class="ann-meta">全州/官宣 · 第一梯队 · 考试公告</div>
+      <div class="ann-tags">
+        <span class="ann-tag">2026-07-29</span>
+        <span class="ann-tag method">考试公告</span>
+        <span class="ann-tag org">高校</span>
+        <span class="ann-tag">全国/官宣</span>
+        <span class="ann-tag">附件含招聘</span>
+        <span class="ann-tag">社招</span>
+        <span class="ann-tag">专业未解析</span>
+      </div>
+    </div>
+    <div class="ann-actions">
+      <div><div class="ann-btn filled">→</div><div class="ann-btn-label">去投递</div></div>
+      <div><div class="ann-btn">✓</div><div class="ann-btn-label">标记完成</div></div>
+    </div>
+  </div>
+
+  <div class="ann-card new">
+    <div class="ann-body">
+      <div class="ann-title">
+        韩山师范学院2026年<span class="kw">公开招</span>聘优秀学科带头人（第一批）公告
+        <span class="tag new">NEW</span>
+      </div>
+      <div class="ann-meta">全州/官宣 · 第一梯队 · 考试公告</div>
+      <div class="ann-tags">
+        <span class="ann-tag">2026-07-22</span>
+        <span class="ann-tag method">考试公告</span>
+        <span class="ann-tag org">高校</span>
+        <span class="ann-tag">全国/官宣</span>
+        <span class="ann-tag">附件含招聘</span>
+        <span class="ann-tag">社招</span>
+        <span class="ann-tag">专业未解析</span>
+      </div>
+    </div>
+    <div class="ann-actions">
+      <div><div class="ann-btn filled">→</div><div class="ann-btn-label">去投递</div></div>
+      <div><div class="ann-btn">✓</div><div class="ann-btn-label">标记完成</div></div>
+    </div>
+  </div>
+
+  <div class="ann-card new">
+    <div class="ann-body">
+      <div class="ann-title">
+        <span style="color:#C44D4D">惠州学院</span>2026年<span class="kw">公开招</span>聘学科带头人、学科骨干公告
+        <span class="tag new">NEW</span>
+      </div>
+      <div class="ann-meta">惠州 · 第一梯队 · 考试公告</div>
+      <div class="ann-tags">
+        <span class="ann-tag">2026-07-22</span>
+        <span class="ann-tag method">考试公告</span>
+        <span class="ann-tag org">高校</span>
+        <span class="ann-tag region">惠州</span>
+        <span class="ann-tag">附件含招聘</span>
+        <span class="ann-tag">社招</span>
+        <span class="ann-tag">专业未解析</span>
+      </div>
+    </div>
+    <div class="ann-actions">
+      <div><div class="ann-btn filled">→</div><div class="ann-btn-label">去投递</div></div>
+      <div><div class="ann-btn">✓</div><div class="ann-btn-label">标记完成</div></div>
+    </div>
+  </div>
+
+  <div class="ann-card hot">
+    <div class="ann-body">
+      <div class="ann-title">
+        深圳市人力资源和社会保障局关于转发深训<span style="color:#1D4ED8">大学</span>2026年7月公开进聘<span class="kw">高层次人才</span>公告
+        <span class="tag hot">HOT</span>
+      </div>
+      <div class="ann-meta">深圳 · 第一梯队 · 直接投递 · 社招</div>
+      <div class="ann-tags">
+        <span class="ann-tag">2026-07-13</span>
+        <span class="ann-tag method">直接公告</span>
+        <span class="ann-tag">社招</span>
+        <span class="ann-tag org">高校</span>
+        <span class="ann-tag region">深圳</span>
+      </div>
+    </div>
+    <div class="ann-actions">
+      <div><div class="ann-btn filled">→</div><div class="ann-btn-label">去投递</div></div>
+      <div><div class="ann-btn">✓</div><div class="ann-btn-label">标记完成</div></div>
+    </div>
+  </div>
+
+  <div class="ann-card hot">
+    <div class="ann-body">
+      <div class="ann-title">
+        广东省人力资源和社会保障厅程录深同大<span style="color:#1D4ED8">学</span>2026年7月公开进聘<span class="kw">高层次人</span>公告
+        <span class="tag hot">HOT</span>
+      </div>
+      <div class="ann-meta">深圳 · 第一梯队 · 直接投递 · 社招</div>
+      <div class="ann-tags">
+        <span class="ann-tag">2026-07-13</span>
+        <span class="ann-tag method">直接公告</span>
+        <span class="ann-tag">社招</span>
+        <span class="ann-tag org">高校</span>
+        <span class="ann-tag region">深圳</span>
+      </div>
+    </div>
+    <div class="ann-actions">
+      <div><div class="ann-btn filled">→</div><div class="ann-btn-label">去投递</div></div>
+      <div><div class="ann-btn">✓</div><div class="ann-btn-label">标记完成</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FAB ═══ -->
+<div class="fab">
+  <button class="fab-btn" title="搜索">🔍</button>
+  <button class="fab-btn" title="回到顶部" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+</div>
+
+</body>
+</html>
